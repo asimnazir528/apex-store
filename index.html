@@ -1,1 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apex Store — Luxury Minimalist eCommerce</title>
+  <style>
+    /* ==========================================================================
+       1. DESIGN TOKENS (Mirrored directly from Phase 1 tokens.css)
+       ========================================================================== */
+    :root {
+      --color-neutral-0: #FFFFFF;
+      --color-neutral-50: #F8F9FA;
+      --color-neutral-100: #F1F3F5;
+      --color-neutral-200: #E9ECEF;
+      --color-neutral-300: #DEE2E6;
+      --color-neutral-400: #CED4DA;
+      --color-neutral-500: #ADB5BD;
+      --color-neutral-600: #6C757D;
+      --color-neutral-700: #495057;
+      --color-neutral-800: #212529;
+      --color-neutral-900: #0B0F19;
 
+      --color-primary: #0B0F19;
+      --color-primary-hover: #1E2538;
+      --color-primary-text: #FFFFFF;
+
+      --color-accent: #C5A880;
+      --color-accent-hover: #B59567;
+      --color-accent-subtle: #FBF9F5;
+      --color-accent-text: #0B0F19;
+
+      --color-sale: #DC2626;
+
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      --font-serif: "Playfair Display", Georgia, serif;
+
+      --space-1: 0.25rem;
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+      --space-12: 3rem;
+      --space-16: 4rem;
+
+      --container-max: 1400px;
+      --radius-sm: 2px;
+      --radius-pill: 9999px;
+
+      --shadow-sm: 0 1px 3px rgba(11, 15, 25, 0.06);
+      --shadow-md: 0 4px 6px -1px rgba(11, 15, 25, 0.08);
+      --shadow-lg: 0 10px 25px -5px rgba(11, 15, 25, 0.1);
+      --shadow-drawer: -4px 0 24px rgba(11, 15, 25, 0.15);
+
+      --transition: 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ==========================================================================
+       2. RESET & BASE STYLES
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--color-neutral-800);
+      background-color: var(--color-neutral-0);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    button {
+      cursor: pointer;
+      font: inherit;
+      border: none;
+      background: none;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: var(--container-max);
+      margin-inline: auto;
+      padding-inline: clamp(1rem, 3vw, 2.5rem);
+    }
+
+    /* ==========================================================================
+       3. ANNOUNCEMENT BAR & NAVIGATION
+       ========================================================================== */
+    .announcement-bar {
+      background: var(--color-primary);
+      color: var(--color-neutral-0);
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 500;
+      text-align: center;
+      padding: 0.5rem 1rem;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      border-bottom: 1px solid var(--color-neutral-200);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+      gap: 2rem;
+    }
+
+    .brand-logo {
+      font-family: var(--font-serif);
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--color-primary);
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    @media (max-width: 900px) {
+      .nav-menu { display: none; }
+    }
+
+    .nav-link {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--color-neutral-700);
+      transition: color var(--transition);
+      position: relative;
+    }
+
+    .nav-link:hover {
+      color: var(--color-primary);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .action-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      color: var(--color-neutral-900);
+      transition: background-color var(--transition);
+    }
+
+    .action-btn:hover {
+      background-color: var(--color-neutral-100);
+    }
+
+    .action-badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: var(--color-accent);
+      color: var(--color-neutral-900);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: var(--radius-pill);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+    }
+
+    /* ==========================================================================
+       4. HERO SECTION
+       ========================================================================== */
+    .hero {
+      position: relative;
+      background: #11141B;
+      color: var(--color-neutral-0);
+      overflow: hidden;
+      min-height: 520px;
+      display: flex;
+      align-items: center;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      opacity: 0.45;
+      background-image: url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1800&q=80');
+      background-size: cover;
+      background-position: center 30%;
+    }
+
+    .hero-content {
+      position: relative;
+      max-width: 640px;
+      padding-block: 4rem;
+    }
+
+    .hero-subtitle {
+      color: var(--color-accent);
+      font-size: 0.8125rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.25rem, 4vw, 3.5rem);
+      line-height: 1.15;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--color-neutral-300);
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.9rem 2rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: var(--radius-sm);
+      transition: all var(--transition);
+    }
+
+    .btn-accent {
+      background: var(--color-accent);
+      color: var(--color-accent-text);
+    }
+
+    .btn-accent:hover {
+      background: var(--color-accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: var(--color-neutral-0);
+      margin-left: 0.75rem;
+    }
+
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: #fff;
+    }
+
+    /* ==========================================================================
+       5. CATEGORIES BAR
+       ========================================================================== */
+    .section {
+      padding-block: 4rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: 1.875rem;
+      color: var(--color-neutral-900);
+    }
+
+    .section-sub {
+      color: var(--color-neutral-500);
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .cat-card {
+      position: relative;
+      height: 130px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      padding: 1.25rem;
+      color: #fff;
+      font-weight: 600;
+      background: #1e2538;
+      transition: transform var(--transition);
+    }
+
+    .cat-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .cat-card img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.6;
+      transition: transform 400ms ease;
+    }
+
+    .cat-card:hover img {
+      transform: scale(1.06);
+    }
+
+    .cat-card span {
+      position: relative;
+      z-index: 1;
+      font-size: 1rem;
+    }
+
+    /* ==========================================================================
+       6. PRODUCT GRID
+       ========================================================================== */
+    .filter-tabs {
+      display: flex;
+      gap: 1rem;
+      border-bottom: 1px solid var(--color-neutral-200);
+      margin-bottom: 2rem;
+    }
+
+    .filter-tab {
+      padding-bottom: 0.75rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--color-neutral-500);
+      border-bottom: 2px solid transparent;
+      transition: all var(--transition);
+    }
+
+    .filter-tab.active {
+      color: var(--color-primary);
+      border-color: var(--color-primary);
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+
+    .product-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      background: var(--color-neutral-0);
+      transition: transform var(--transition);
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .product-thumb {
+      position: relative;
+      aspect-ratio: 3 / 4;
+      background-color: var(--color-neutral-100);
+      overflow: hidden;
+      border-radius: var(--radius-sm);
+    }
+
+    .product-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 500ms ease;
+    }
+
+    .product-card:hover .product-thumb img {
+      transform: scale(1.05);
+    }
+
+    .badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.5rem;
+      border-radius: var(--radius-sm);
+      z-index: 2;
+    }
+
+    .badge-sale {
+      background: var(--color-sale);
+      color: #fff;
+    }
+
+    .wishlist-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 34px;
+      height: 34px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-neutral-700);
+      z-index: 2;
+      transition: all var(--transition);
+    }
+
+    .wishlist-btn:hover {
+      background: #fff;
+      color: var(--color-sale);
+      transform: scale(1.1);
+    }
+
+    .wishlist-btn.active svg path {
+      fill: var(--color-sale);
+      stroke: var(--color-sale);
+    }
+
+    .product-details {
+      padding-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      flex-grow: 1;
+    }
+
+    .product-cat {
+      font-size: 0.75rem;
+      color: var(--color-neutral-500);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .product-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--color-neutral-900);
+    }
+
+    .product-price {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.25rem;
+      font-size: 0.9375rem;
+      font-weight: 600;
+    }
+
+    .price-regular {
+      color: var(--color-neutral-900);
+    }
+
+    .price-old {
+      font-size: 0.85rem;
+      color: var(--color-neutral-500);
+      text-decoration: line-through;
+    }
+
+    .add-to-cart-quick {
+      margin-top: 0.85rem;
+      width: 100%;
+      padding: 0.75rem;
+      background: var(--color-neutral-900);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-radius: var(--radius-sm);
+      transition: background var(--transition);
+    }
+
+    .add-to-cart-quick:hover {
+      background: var(--color-primary-hover);
+    }
+
+    /* ==========================================================================
+       7. MINI CART SLIDE-OUT DRAWER
+       ========================================================================== */
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(11, 15, 25, 0.6);
+      backdrop-filter: blur(2px);
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 300ms ease, visibility 300ms ease;
+    }
+
+    .drawer-backdrop.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      max-width: 420px;
+      background: #fff;
+      z-index: 1001;
+      transform: translateX(100%);
+      transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: var(--shadow-drawer);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--color-neutral-200);
+    }
+
+    .drawer-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+    }
+
+    .drawer-close {
+      font-size: 1.5rem;
+      line-height: 1;
+      color: var(--color-neutral-500);
+    }
+
+    .drawer-close:hover {
+      color: var(--color-neutral-900);
+    }
+
+    .drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .drawer-item {
+      display: flex;
+      gap: 1rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--color-neutral-100);
+    }
+
+    .drawer-item-img {
+      width: 72px;
+      height: 90px;
+      border-radius: var(--radius-sm);
+      background: var(--color-neutral-100);
+      flex-shrink: 0;
+    }
+
+    .drawer-item-info {
+      flex: 1;
+    }
+
+    .drawer-item-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .drawer-item-price {
+      font-size: 0.8125rem;
+      color: var(--color-neutral-600);
+      margin-top: 0.25rem;
+    }
+
+    .drawer-item-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+    }
+
+    .qty-ctrl {
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--color-neutral-300);
+      border-radius: var(--radius-sm);
+    }
+
+    .qty-btn {
+      width: 24px;
+      height: 24px;
+      font-weight: 600;
+    }
+
+    .qty-num {
+      padding-inline: 0.5rem;
+      font-size: 0.8125rem;
+    }
+
+    .remove-btn {
+      font-size: 0.75rem;
+      color: var(--color-neutral-500);
+      text-decoration: underline;
+    }
+
+    .remove-btn:hover {
+      color: var(--color-sale);
+    }
+
+    .drawer-footer {
+      padding: 1.5rem;
+      border-top: 1px solid var(--color-neutral-200);
+      background: var(--color-neutral-50);
+    }
+
+    .drawer-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    /* ==========================================================================
+       8. PREDICTIVE SEARCH MODAL
+       ========================================================================== */
+    .search-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      padding: 2rem;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-100%);
+      transition: transform 300ms ease;
+      z-index: 999;
+    }
+
+    .search-modal.open {
+      transform: translateY(0);
+    }
+
+    .search-input-wrapper {
+      max-width: 700px;
+      margin-inline: auto;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      font-size: 1.25rem;
+      padding: 0.75rem 1rem 0.75rem 2.5rem;
+      border-bottom: 2px solid var(--color-neutral-900);
+    }
+
+    .search-icon-pos {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    /* Quick Toast Feedback */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--color-primary);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-pill);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      box-shadow: var(--shadow-lg);
+      transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 2000;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Announcement Bar -->
+  <aside class="announcement-bar">
+    Complimentary Express Global Shipping on Orders Over $200 &bull; 30-Day Effortless Returns
+  </aside>
+
+  <!-- Sticky Header -->
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <!-- Logo -->
+        <a href="#" class="brand-logo">APEX</a>
+
+        <!-- Desktop Navigation -->
+        <nav>
+          <ul class="nav-menu">
+            <li><a href="#shop" class="nav-link">New In</a></li>
+            <li><a href="#shop" class="nav-link">Apparel</a></li>
+            <li><a href="#shop" class="nav-link">Accessories</a></li>
+            <li><a href="#shop" class="nav-link">Footwear</a></li>
+            <li><a href="#shop" class="nav-link">Editorial</a></li>
+          </ul>
+        </nav>
+
+        <!-- Actions: Search, Wishlist, Mini-Cart -->
+        <div class="nav-actions">
+          <button class="action-btn" id="search-trigger" aria-label="Search Catalog">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </button>
+          
+          <button class="action-btn" id="wishlist-trigger" aria-label="Saved Wishlist">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+            <span class="action-badge" id="wishlist-badge">0</span>
+          </button>
+
+          <button class="action-btn" id="cart-trigger" aria-label="Cart Overview">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+            <span class="action-badge" id="cart-badge">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Search Dropdown Layer -->
+  <div class="search-modal" id="search-modal">
+    <div class="search-input-wrapper">
+      <span class="search-icon-pos">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+      </span>
+      <input type="text" class="search-input" id="search-input" placeholder="Search curated catalogue by keyword, SKU or style..." autocomplete="off">
+    </div>
+  </div>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-bg"></div>
+      <div class="container">
+        <div class="hero-content">
+          <p class="hero-subtitle">Autumn / Winter Edition</p>
+          <h1 class="hero-title">Timeless craftsmanship, designed for the modern lifestyle.</h1>
+          <p class="hero-desc">Discover our precision-tailored essentials crafted from sustainably sourced materials. Engineered for durability, elegance, and comfort.</p>
+          <div>
+            <a href="#shop" class="btn btn-accent">Explore Collection</a>
+            <a href="#categories" class="btn btn-outline">Categories</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Category Quick Access -->
+    <section class="section" id="categories">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Shop by Category</h2>
+            <p class="section-sub">Carefully organized departments for intuitive discovery</p>
+          </div>
+        </div>
+
+        <div class="cat-grid">
+          <a href="#shop" class="cat-card">
+            <img src="https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=400&q=80" alt="Apparel">
+            <span>Outerwear</span>
+          </a>
+          <a href="#shop" class="cat-card">
+            <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80" alt="Horology">
+            <span>Watches</span>
+          </a>
+          <a href="#shop" class="cat-card">
+            <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=400&q=80" alt="Footwear">
+            <span>Footwear</span>
+          </a>
+          <a href="#shop" class="cat-card">
+            <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=400&q=80" alt="Leather Goods">
+            <span>Leather Goods</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Product Showcase -->
+    <section class="section" id="shop" style="background-color: var(--color-neutral-50);">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Featured Curations</h2>
+            <p class="section-sub">Real-time stock synchronized with inventory engine</p>
+          </div>
+        </div>
+
+        <div class="filter-tabs">
+          <button class="filter-tab active">All Arrivals</button>
+          <button class="filter-tab">Outerwear</button>
+          <button class="filter-tab">Accessories</button>
+          <button class="filter-tab">Exclusive</button>
+        </div>
+
+        <div class="product-grid" id="product-grid">
+          <!-- Dynamically Populated by JavaScript -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Slide-out AJAX Mini-Cart Drawer -->
+  <div class="drawer-backdrop" id="cart-backdrop"></div>
+  <aside class="drawer" id="cart-drawer">
+    <div class="drawer-header">
+      <h3 class="drawer-title">Shopping Bag (<span id="drawer-count">0</span>)</h3>
+      <button class="drawer-close" id="drawer-close" aria-label="Close cart">&times;</button>
+    </div>
+    
+    <div class="drawer-body" id="drawer-items">
+      <!-- Injected dynamically -->
+    </div>
+
+    <div class="drawer-footer">
+      <div class="drawer-total">
+        <span>Estimated Subtotal</span>
+        <span id="drawer-total-price">$0.00</span>
+      </div>
+      <button class="btn btn-accent" style="width: 100%;" onclick="alert('Proceeding to Native WooCommerce Checkout Flow...')">
+        Secure Checkout
+      </button>
+    </div>
+  </aside>
+
+  <!-- Notification Toast -->
+  <div class="toast" id="toast">Item added to your bag</div>
+
+  <!-- JavaScript Module Simulation -->
+  <script>
+    // Mock Product Data Store
+    const products = [
+      {
+        id: 101,
+        title: "Merino Wool Cashmere Overcoat",
+        category: "Outerwear",
+        price: 480.00,
+        oldPrice: 560.00,
+        badge: "Sale",
+        image: "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 102,
+        title: "Chronograph Automatic 41mm",
+        category: "Horology",
+        price: 1250.00,
+        oldPrice: null,
+        badge: "New",
+        image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 103,
+        title: "Full-Grain Saddle Leather Tote",
+        category: "Leather Goods",
+        price: 340.00,
+        oldPrice: null,
+        badge: null,
+        image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 104,
+        title: "Italian Hand-Burnished Chelsea Boots",
+        category: "Footwear",
+        price: 395.00,
+        oldPrice: 440.00,
+        badge: "Sale",
+        image: "https://images.unsplash.com/photo-1638247025967-b4e38f787b76?auto=format&fit=crop&w=600&q=80"
+      }
+    ];
+
+    // State Store
+    let cart = [];
+    let wishlist = new Set();
+
+    // DOM References
+    const productGrid = document.getElementById('product-grid');
+    const cartTrigger = document.getElementById('cart-trigger');
+    const cartDrawer = document.getElementById('cart-drawer');
+    const cartBackdrop = document.getElementById('cart-backdrop');
+    const drawerClose = document.getElementById('drawer-close');
+    const drawerItems = document.getElementById('drawer-items');
+    const drawerTotal = document.getElementById('drawer-total-price');
+    const cartBadge = document.getElementById('cart-badge');
+    const drawerCount = document.getElementById('drawer-count');
+    const wishlistBadge = document.getElementById('wishlist-badge');
+    const searchTrigger = document.getElementById('search-trigger');
+    const searchModal = document.getElementById('search-modal');
+    const searchInput = document.getElementById('search-input');
+    const toast = document.getElementById('toast');
+
+    // Render Product Cards
+    function renderProducts() {
+      productGrid.innerHTML = products.map(product => `
+        <article class="product-card">
+          <div class="product-thumb">
+            ${product.badge ? `<span class="badge ${product.badge === 'Sale' ? 'badge-sale' : ''}">${product.badge}</span>` : ''}
+            <button class="wishlist-btn ${wishlist.has(product.id) ? 'active' : ''}" onclick="toggleWishlist(${product.id})" aria-label="Save to Wishlist">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+            </button>
+            <img src="${product.image}" alt="${product.title}" loading="lazy">
+          </div>
+          <div class="product-details">
+            <span class="product-cat">${product.category}</span>
+            <h3 class="product-name">${product.title}</h3>
+            <div class="product-price">
+              <span class="price-regular">$${product.price.toFixed(2)}</span>
+              ${product.oldPrice ? `<span class="price-old">$${product.oldPrice.toFixed(2)}</span>` : ''}
+            </div>
+            <button class="add-to-cart-quick" onclick="addToCart(${product.id})">Add to Bag</button>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    // Cart Management
+    window.addToCart = function(productId) {
+      const product = products.find(p => p.id === productId);
+      const existing = cart.find(item => item.id === productId);
+
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ ...product, qty: 1 });
+      }
+
+      updateCartUI();
+      openCart();
+      showToast(`Added ${product.title} to bag`);
+    };
+
+    window.updateQty = function(productId, delta) {
+      const item = cart.find(item => item.id === productId);
+      if (!item) return;
+
+      item.qty += delta;
+      if (item.qty <= 0) {
+        cart = cart.filter(p => p.id !== productId);
+      }
+      updateCartUI();
+    };
+
+    window.removeFromCart = function(productId) {
+      cart = cart.filter(p => p.id !== productId);
+      updateCartUI();
+    };
+
+    function updateCartUI() {
+      const totalCount = cart.reduce((acc, item) => acc + item.qty, 0);
+      const totalPrice = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+
+      cartBadge.textContent = totalCount;
+      drawerCount.textContent = totalCount;
+      drawerTotal.textContent = `$${totalPrice.toFixed(2)}`;
+
+      if (cart.length === 0) {
+        drawerItems.innerHTML = `<div style="text-align: center; color: var(--color-neutral-500); padding-block: 4rem;">Your shopping bag is empty.</div>`;
+        return;
+      }
+
+      drawerItems.innerHTML = cart.map(item => `
+        <div class="drawer-item">
+          <img src="${item.image}" alt="${item.title}" class="drawer-item-img">
+          <div class="drawer-item-info">
+            <h4 class="drawer-item-title">${item.title}</h4>
+            <div class="drawer-item-price">$${item.price.toFixed(2)}</div>
+            <div class="drawer-item-actions">
+              <div class="qty-ctrl">
+                <button class="qty-btn" onclick="updateQty(${item.id}, -1)">&minus;</button>
+                <span class="qty-num">${item.qty}</span>
+                <button class="qty-btn" onclick="updateQty(${item.id}, 1)&plus;</button>
+              </div>
+              <button class="remove-btn" onclick="removeFromCart(${item.id})">Remove</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Wishlist Simulation (Mirrors class-apex-wishlist.php)
+    window.toggleWishlist = function(productId) {
+      if (wishlist.has(productId)) {
+        wishlist.delete(productId);
+        showToast("Removed from Wishlist");
+      } else {
+        wishlist.add(productId);
+        showToast("Added to Wishlist");
+      }
+      wishlistBadge.textContent = wishlist.size;
+      renderProducts();
+    };
+
+    // Drawers & Modals
+    function openCart() {
+      cartDrawer.classList.add('open');
+      cartBackdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCart() {
+      cartDrawer.classList.remove('open');
+      cartBackdrop.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    cartTrigger.addEventListener('click', openCart);
+    drawerClose.addEventListener('click', closeCart);
+    cartBackdrop.addEventListener('click', closeCart);
+
+    // Search Toggle
+    searchTrigger.addEventListener('click', () => {
+      searchModal.classList.toggle('open');
+      if (searchModal.classList.contains('open')) {
+        searchInput.focus();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeCart();
+        searchModal.classList.remove('open');
+      }
+    });
+
+    // Feedback Toast
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    // Boot
+    renderProducts();
+    updateCartUI();
+  </script>
+</body>
+</html>
